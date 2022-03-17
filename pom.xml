@@ -406,12 +406,12 @@
 		<repository>
 			<id>central</id>
 			<name>a0iaweaon0acy-artifactory-primary-0-releases</name>
-			<url>https://santoshkushaldemo.jfrog.io/artifactory/kushaldemo-libs-release</url>
+			<url>https://kushalmadireddy.jfrog.io/artifactory/petclinic-libs-release</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
 			<name>a0iaweaon0acy-artifactory-primary-0-snapshots</name>
-			<url>https://santoshkushaldemo.jfrog.io/artifactory/kushaldemo-libs-snapshot</url>
+			<url>https://kushalmadireddy.jfrog.io/artifactory/petclinic-libs-snapshot</url>
 		</snapshotRepository>
 	</distributionManagement>
 
