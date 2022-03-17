@@ -2,8 +2,18 @@ version: 2.1
 
 orbs:
   maven: circleci/maven@0.0.12
+  artifactory-orb: jfrog/artifactory-orb@1.0.1
+
+jobs:
+  example-job:
+    docker:
+      # replace with your preferred image
+      - image: cimg/base:stable
+    steps:
+      - artifactory-orb/build-integration
 
 workflows:
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
+      - example-job
