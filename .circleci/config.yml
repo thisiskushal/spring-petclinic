@@ -12,7 +12,7 @@ jobs:
       - run:
           name: configure CLI to Artifactory
           command: |
-            ./jfrog config add kushalmadireddy.jfrog.io --artifactory-url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --apikey $ARTIFACTORY_API_KEY --interactive=false
+            jfrog config add kushalmadireddy.jfrog.io --artifactory-url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --apikey $ARTIFACTORY_API_KEY --interactive=false
       - artifactory/build-integration
 #            ./jfrog rt u ./target/*.jar <artifactory_repo_name> --build-name=petclinic_circleci --build-number=$CIRCLE_BUILD_NUM
 #            ./jfrog rt bce petclinic_circleci $CIRCLE_BUILD_NUM  # collects all environment variables on the agent
