@@ -1,22 +1,26 @@
+version: 2
 jobs:
-  build:
+  upload-artifact:
     docker:
-      - image: 'circleci/node:10'
+      - image: cimg/openjdk:17.0
+        auth:
+          username: thisiskushal
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    working_directory: ~/repo
     steps:
       - checkout
-      - artifactory/install
-#      - artifactory/configure
-#      - run:
-#          name: Install JFrog CLI
-#          command: curl -fL https://getcli.jfrog.io | sh
+      - run: mvn dependency:go-offline
       - run:
-          name: configure CLI to Artifactory
+          name: maven build
           command: |
-            jfrog config add kushalmadireddy.jfrog.io --artifactory-url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --apikey $ARTIFACTORY_API_KEY --interactive=false
-      - artifactory/build-integration
-#            ./jfrog rt u ./target/*.jar <artifactory_repo_name> --build-name=petclinic_circleci --build-number=$CIRCLE_BUILD_NUM
-#            ./jfrog rt bce petclinic_circleci $CIRCLE_BUILD_NUM  # collects all environment variables on the agent
-#            ./jfrog rt bp petclinic_circleci $CIRCLE_BUILD_NUM  # attaches ^^ to the build in artifactory
-orbs:
-  artifactory: circleci/artifactory@1.0.0
-version: 2.1
+            mvn clean install
+      - run:
+          name: Install JFrog CLI
+          command: curl -fL https://getcli.jfrog.io | sh
+      - run:
+          name: Push to Artifactory
+          command: |
+            ./jfrog config add kushalmadireddy.jfrog.io --artifactory-url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --apikey $ARTIFACTORY_API_KEY --interactive=false
+            ./jfrog rt u ./target/*.jar demo-docker-virtual --build-name=petclinic-circleci --build-number=$CIRCLE_BUILD_NUM
+            ./jfrog rt bce petclinic-circleci $CIRCLE_BUILD_NUM  # collects all environment variables on the agent
+            ./jfrog rt bp petclinic-circleci $CIRCLE_BUILD_NUM  # attaches ^^ to the build in artifactory
