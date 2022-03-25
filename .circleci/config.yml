@@ -9,6 +9,7 @@ jobs:
           - checkout
           - run: mvn clean install
           - artifactory/install
+          - artifactory/configure
           - artifactory/upload:
               source: target/*.jar
               target: default-maven-virtual
