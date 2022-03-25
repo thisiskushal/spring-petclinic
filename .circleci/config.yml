@@ -2,9 +2,6 @@ version: '2.1'
 orbs:
   artifactory: ware2go/artifactory@1.1.25
 workflows:
-  install:
-    jobs:
-      - artifactory/install
   publish:
     jobs:
       - artifactory/upload:
