@@ -8,6 +8,7 @@ jobs:
         steps:
           - checkout
           - run: mvn clean install
+          - artifactory/install
           - artifactory/upload:
               source: target/*.jar
               target: default-maven-virtual
