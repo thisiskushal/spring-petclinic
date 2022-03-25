@@ -14,6 +14,7 @@ jobs:
           - artifactory/upload:
               source: target/*.jar
               target: default-maven-virtual
+          - run: jfrog rt bpr ${CIRCLE_PROJECT_REPONAME} ${CIRCLE_BUILD_NUM} default-maven-virtual
 
 
 ####################### AUTO GENERATED ####################### 
