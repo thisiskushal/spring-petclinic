@@ -7,7 +7,6 @@ workflows:
       - artifactory/upload:
           build-steps:
             - run: mvn install -B
-          name: Publish Maven Jar
           source: target/*.jar
           target: default-maven-virtual
 
