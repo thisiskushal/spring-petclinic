@@ -1,16 +1,19 @@
-version: '2.1'
+version: 2.1
 orbs:
   artifactory: ware2go/artifactory@1.1.25
-workflows:
-  publish:
-    jobs:
-      - checkout
-      - run:
-          name: Maven Publish
-          command: mvn clean install
-      - artifactory/upload:
-          source: target/*.jar
-          target: default-maven-virtual
+jobs:
+      build:
+        docker:
+          - image: cimg/openjdk:17.0.2
+        steps:
+          - checkout
+          - run: mvn clean install
+          - artifactory/install
+          #- artifactory/configure
+          - run : jfrog config add --user=${ARTIFACTORY_USER} --url=${ARTIFACTORY_URL} --apikey=${ARTIFACTORY_API_KEY} --interactive=false
+          - artifactory/upload:
+              source: target/*.jar
+              target: default-maven-virtual
 
 
 ####################### AUTO GENERATED ####################### 
