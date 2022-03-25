@@ -6,6 +6,7 @@ jobs:
         docker:
           - image: cimg/openjdk:17.0.2
         steps:
+          - checkout
           - run: mvn clean install
           - artifactory/upload:
               source: target/*.jar
