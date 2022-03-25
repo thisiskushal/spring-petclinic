@@ -4,11 +4,11 @@ orbs:
 workflows:
   publish:
     jobs:
+      - checkout
+      - run:
+          name: Maven Publish
+          command: mvn clean install
       - artifactory/upload:
-          build-steps:
-            - run: 
-                name: Generate Maven jar
-                command: mvn install -B
           source: target/*.jar
           target: default-maven-virtual
 
