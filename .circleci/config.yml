@@ -6,7 +6,9 @@ workflows:
     jobs:
       - artifactory/upload:
           build-steps:
-            - run: mvn install -B
+            - run: 
+                name: Generate Maven jar
+                command: mvn install -B
           source: target/*.jar
           target: default-maven-virtual
 
