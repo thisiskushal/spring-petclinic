@@ -1,0 +1,56 @@
+resources:
+- name: thisiskushal_spring_petclinic_gitResource
+  type: GitRepo
+  configuration:
+    path: thisiskushal/spring-petclinic
+    gitProvider: github_thisiskushal_spring_petclinic_integration
+    buildOn:
+      pullRequestCreate: true
+    branches:
+      include: main
+- name: thisiskushal_spring_petclinic_buildInfoResource
+  type: BuildInfo
+  configuration:
+    sourceArtifactory: rt_thisiskushal_spring_petclinic_integration
+    buildName: spring-petclinic-main
+    buildNumber: $run_number
+pipelines:
+- name: thisiskushal_spring_petclinic_pipeline
+  configuration:
+    environmentVariables:
+      readOnly:
+        CI: "true"
+        JFROG_CLI_BUILD_NAME: spring-petclinic-main
+        JFROG_CLI_BUILD_NUMBER: $run_number
+        JFROG_CLI_BUILD_URL: $step_url
+  steps:
+  - name: MvnBuildStep
+    type: MvnBuild
+    configuration:
+      environmentVariables:
+        JFROG_BUILD_STATUS: PASS
+      integrations:
+      - name: rt_thisiskushal_spring_petclinic_integration
+      inputResources:
+      - name: thisiskushal_spring_petclinic_gitResource
+      mvnCommand: clean install
+      resolverSnapshotRepo: kushalm-maven-virtual
+      resolverReleaseRepo: kushalm-maven-virtual
+    execution:
+      onFailure:
+      - export JFROG_BUILD_STATUS=FAIL
+      - jfrog rt bce
+      - jfrog rt bp
+  - name: PublishBuildInfoStep
+    type: PublishBuildInfo
+    configuration:
+      inputResources:
+      - name: thisiskushal_spring_petclinic_gitResource
+      outputResources:
+      - name: thisiskushal_spring_petclinic_buildInfoResource
+      inputSteps:
+      - name: MvnBuildStep
+      forceXrayScan: true
+    execution:
+      onComplete:
+      - update_commit_status thisiskushal_spring_petclinic_gitResource
